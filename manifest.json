@@ -9,5 +9,5 @@
 	"browser_action": {
 		"default_icon": "icons/exporturl_32x32.png"
 	},
-	"permissions": ["<all_urls>", "tabs"]
+	"permissions": ["<all_urls>", "tabs", "tabGroups"]
 }

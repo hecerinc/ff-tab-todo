@@ -69,11 +69,11 @@ p.timestamp {
 	position: relative;
 	top: 2px;
 }
-li.opentab-link {
+.opentab-link li {
 	display: flex;
 	align-items: flex-start;
 }
-li.opentab-link.completed {
+.opentab-link.completed li {
 	text-decoration: line-through;
 }
 .opentab-link span.groupPill {
@@ -90,14 +90,18 @@ li.opentab-link.completed {
 .openWindow li:first-child {
 	margin-top: 0;
 }
-.openWindow {
-	border-bottom: 1px solid #bbb;
-	padding-bottom: 25px;
+hr {
+	margin: 0;
+	border: 0 none;
+	border-top: 1px solid #bbb;
 }
 #urlContainer {
 	display: flex;
 	flex-direction: column;
-	column-gap: 15px;
+	gap: 15px;
+}
+#urlContainer hr:last-child {
+	display: none;
 }
 #urlContainer .openWindow:last-child {
 	border: 0 none;

@@ -15,16 +15,22 @@ const getTimeStamp = () => {
 	return `${YYYY}-${mm}-${dd} ${timestr}`;
 };
 
-const getTabsList = (tabWindow, currentTab, tabs) => {
+const getGroupFromId = (groups, id) => {
+	if (id === browser.tabGroups.TAB_GROUP_ID_NONE) {
+		return null;
+	}
+	return groups.find((g) => g.id == id);
+};
+const getTabsList = (tabWindow, tabGroups, currentTab, tabs) => {
 	return tabs
 		.filter((t) => t.id !== currentTab.id)
 		.map((t) => {
-			// const group = getGroupFromId(tabGroups, t.groupId);
-			const opentabLink = document.createElement('li', { is: 'opentab-link' });
+			const group = getGroupFromId(tabGroups, t.groupId);
+			const opentabLink = document.createElement('opentab-link');
 			opentabLink.dataset.tabid = t.id;
 			opentabLink.dataset.windowid = tabWindow.id;
-			// opentabLink.dataset.groupcolor = group?.color;
-			// opentabLink.dataset.group = group?.title;
+			opentabLink.dataset.groupcolor = group?.color;
+			opentabLink.dataset.group = group?.title;
 			opentabLink.dataset.tabtitle = t.title;
 			opentabLink.textContent = t.url;
 			return opentabLink;
@@ -33,12 +39,13 @@ const getTabsList = (tabWindow, currentTab, tabs) => {
 
 const listTabs = async () => {
 	const currentTab = await browser.tabs.getCurrent();
+	const tabGroups = await browser.tabGroups.query({});
 	const allWindows = await browser.windows.getAll({ populate: true });
 	// - 1 because we don't want to count the extension one!
 	const tabCount = allWindows.map((t) => t.tabs.length).reduce((a, b) => a + b, 0) - 1;
 	const windowCount = allWindows.length;
 	const windowLists = allWindows.map((w) => {
-		const tabOpenLinks = getTabsList(w, currentTab, w.tabs);
+		const tabOpenLinks = getTabsList(w, tabGroups, currentTab, w.tabs);
 		const windowList = document.createElement('ul');
 		windowList.classList.add('openWindow');
 		tabOpenLinks.forEach((tol) => {
